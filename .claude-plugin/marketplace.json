@@ -1,0 +1,7 @@
+{
+  "name": "paldom",
+  "owner": { "name": "Paldom" },
+  "plugins": [
+    { "name": "agents-connect", "source": "./plugin", "description": "agents-connect hub channel: wake idle sessions with hub messages and relay permission prompts." }
+  ]
+}

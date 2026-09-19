@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "assets": [
+    { "file": "public/icons/hub.svg", "pack": "own", "source": "own:project", "license": "Own-Work" },
+    { "file": "public/icons/phone.svg", "pack": "own", "source": "own:project", "license": "Own-Work" },
+    { "file": "public/icons/mail.svg", "pack": "own", "source": "own:project", "license": "Own-Work" },
+    { "file": "public/icons/check.svg", "pack": "own", "source": "own:project", "license": "Own-Work" },
+    { "file": "public/icons/terminal.svg", "pack": "own", "source": "own:project", "license": "Own-Work" }
+  ],
+  "fonts": [
+    { "family": "Inter", "source": "https://fonts.google.com/specimen/Inter", "license": "OFL-1.1" },
+    { "family": "JetBrains Mono", "source": "https://fonts.google.com/specimen/JetBrains+Mono", "license": "OFL-1.1" }
+  ]
+}

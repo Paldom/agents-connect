@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function owns() { return signedIn() && resource.data.ownerUid == request.auth.uid; }
+
+    // Notification preferences and device tokens. Self-only, fixed shape.
+    match /users/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['emailNotifications', 'fcmTokens', 'mute'])
+        && (!('emailNotifications' in request.resource.data) || request.resource.data.emailNotifications is bool)
+        && (!('fcmTokens' in request.resource.data)
+            || (request.resource.data.fcmTokens is list && request.resource.data.fcmTokens.size() <= 20))
+        && (!('mute' in request.resource.data) || request.resource.data.mute is map);
+    }
+
+    // Everything below is written only by the `api` function (Admin SDK). Clients read their own data.
+    match /scopes/{scopeId} {
+      allow read: if owns();
+      allow write: if false;
+      match /channels/{channel} {
+        allow read: if owns();
+        allow write: if false;
+      }
+      match /messages/{messageId} {
+        allow read: if owns();
+        allow write: if false;
+      }
+      // Idempotency keys and consumer cursors are function-internal.
+      match /keys/{key} { allow read, write: if false; }
+      match /consumers/{consumer} { allow read, write: if false; }
+    }
+    // Collection-group read for the cross-scope inbox of open questions.
+    match /{path=**}/messages/{messageId} {
+      allow read: if owns();
+    }
+
+    match /tokens/{tokenHash} {
+      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      allow write: if false;
+    }
+  }
+}

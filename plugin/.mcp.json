@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "agents-connect": {
+      "command": "agents-connect",
+      "args": ["mcp", "--channel"]
+    }
+  }
+}

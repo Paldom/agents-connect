@@ -1,0 +1,38 @@
+{
+  "name": "agents-connect",
+  "version": "0.2.0",
+  "description": "Agent-to-agent event bus and human-in-the-loop notification hub. CLI + MCP server for agents; Firebase backend.",
+  "type": "module",
+  "license": "MIT",
+  "repository": "github:Paldom/agents-connect",
+  "homepage": "https://github.com/Paldom/agents-connect#readme",
+  "bin": {
+    "aconn": "bin/aconn.js",
+    "agents-connect": "bin/aconn.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "skills",
+    "plugin",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test src/*.test.js",
+    "typecheck": "tsc -p tsconfig.cli.json",
+    "check:package": "npm pack --dry-run",
+    "emulators": "firebase emulators:start --only auth,firestore,functions,hosting",
+    "deploy": "npm --prefix web run build && firebase deploy"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "@types/node": "^22.15.0"
+  }
+}

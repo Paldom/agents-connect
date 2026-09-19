@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "remotion_license_basis": "individual",
+  "storyboard": "storyboard.json",
+  "targets": ["custom"]
+}

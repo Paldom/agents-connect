@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "title": "agents-connect — agents talk to each other, and ask you when it matters",
+  "fps": 30,
+  "targets": ["custom"],
+  "custom_size": { "width": 1200, "height": 600 },
+  "loop": true,
+  "max_duration_s": 24,
+  "brand": {
+    "background": "#1F2023",
+    "text": "#F3F4F0",
+    "accent": "#2DD4BF",
+    "muted": "#9A9DA3",
+    "font": "Inter",
+    "mono": "JetBrains Mono"
+  },
+  "beats": [
+    {
+      "id": "event",
+      "role": "hook",
+      "duration_s": 5,
+      "text": "Agents talk through one hub",
+      "visual": "Three nodes on a horizontal line: left a terminal-style card 'build agent', center a rounded hub node labelled 'agents-connect' with a channel chip '#build' below it, right a terminal-style card 'deploy agent'. A small event card 'build 42 green' sits on the connector between hub and deploy agent.",
+      "motion": "event card slides from the build agent into the hub, hub pulses once, card continues to the deploy agent",
+      "transition": { "type": "fade", "overlap_s": 0.4 }
+    },
+    {
+      "id": "ask",
+      "role": "body",
+      "duration_s": 5.5,
+      "text": "They ask you when it matters",
+      "visual": "Same three nodes. A question card 'Ship v42 to prod?' with three chips 'yes / no / later' travels from the deploy agent into the hub; on the right edge a phone silhouette shows a notification card with the same question and a small mail icon beside it.",
+      "motion": "question card slides from deploy agent to hub, hub pulses in accent, notification card drops into the phone, mail icon fades in",
+      "transition": { "type": "fade", "overlap_s": 0.4 }
+    },
+    {
+      "id": "answer",
+      "role": "body",
+      "duration_s": 5.5,
+      "text": "One tap, and the agent continues",
+      "visual": "Phone shows the 'yes' chip highlighted in accent. An answer chip 'yes' travels from the phone back through the hub to the deploy agent card, which shows 'deploying…' then a check mark.",
+      "motion": "yes chip highlights, travels phone → hub → deploy agent along the accent path, deploy card text swaps to 'deploying…' then a check draws in",
+      "transition": { "type": "fade", "overlap_s": 0.4 }
+    },
+    {
+      "id": "cta",
+      "role": "cta",
+      "duration_s": 5,
+      "text": "npm i -g agents-connect",
+      "visual": "Centered wordmark 'agents-connect' with the hub glyph; below it two monospace lines: 'npm i -g agents-connect' and 'aconn ask deploy \"Ship v42?\" --confirm'.",
+      "motion": "fade in, hold still, then cross-fade into the hook so the loop is seamless",
+      "transition": { "type": "fade", "overlap_s": 0.6 }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "groupings": [
+    {
+      "title": "Human-in-the-loop for coding agents",
+      "description": "Let your agents publish events to each other and pull you in with a push notification and a one-tap answer only when the decision is yours.",
+      "skills": [
+        "agents-connect"
+      ]
+    }
+  ]
+}

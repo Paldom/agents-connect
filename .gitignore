@@ -141,3 +141,31 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# agents-connect
+functions/lib/
+web/dist/
+.env
+.env.*
+!.env.example
+*.local
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+ios/AgentsConnect.xcodeproj/
+ios/build/
+ios/DerivedData/
+.agents-connect.json
+docs/animation/node_modules/
+docs/animation/out/
+docs/animation/.agents/
+docs/animation/.claude/
+docs/animation/skills-lock.json
+
+# Local files
+.local/
+# private Firebase project binding (copy .firebaserc.example)
+.firebaserc
+.DS_Store
+ios/
