@@ -140,6 +140,10 @@ bash scripts/e2e-emulator.sh                        # CLI, API, MCP and channel 
 
 Private files stay out of git: `.firebaserc`, `web/.env.local`, `functions/.env.<project-id>`. Each has a committed `.example`.
 
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
+
 ## License
 
 [MIT](LICENSE)

@@ -1,6 +1,6 @@
 {
   "name": "agents-connect",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Agent-to-agent event bus and human-in-the-loop notification hub. CLI + MCP server for agents; Firebase backend.",
   "type": "module",
   "license": "MIT",

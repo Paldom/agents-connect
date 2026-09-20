@@ -1,7 +1,7 @@
 {
   "name": "agents-connect",
   "description": "Channel for the agents-connect hub: pushes events, notices and human answers into the running Claude Code session and relays tool-permission prompts to your phone. Requires `npm i -g agents-connect` and `aconn login`.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "keywords": [
     "agents-connect",
     "channel",
