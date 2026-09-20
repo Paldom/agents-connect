@@ -169,3 +169,4 @@ docs/animation/skills-lock.json
 .firebaserc
 .DS_Store
 ios/
+.claude/settings.local.json

@@ -52,7 +52,7 @@ aconn status                                         # "aconn: 1 answer · build
 |---|---|
 | `aconn login --api-url URL` / `aconn logout` | Store or remove the token for one hub (`~/.config/agents-connect/config.json`, mode 0600) |
 | `aconn init <scope> [--subscribe a,b]` | Bind the repo to a scope and list the channels to watch, in `.agents-connect.json` |
-| `aconn setup [--dry-run]` | Register the MCP server in Claude Code, Codex, Cursor, Gemini CLI and OpenCode; add Claude Code hooks and an `AGENTS.md` snippet |
+| `aconn setup [--dry-run]` | Register the MCP server in Claude Code, Codex, Cursor, Gemini CLI and OpenCode; add project-level Claude Code hooks (`.claude/settings.local.json`) and an `AGENTS.md` snippet |
 | `aconn send` / `aconn notify` / `aconn ask` / `aconn reply` | Publish an event, notify humans, ask humans, reply in a thread. Flags: `--data`, `--thread`, `--reply-to`, `--priority`, `--tag`, `--key` |
 | `aconn wait <id>` / `aconn get <id>` / `aconn cancel <id> [--reason expired]` | Follow up on a question |
 | `aconn read <channel>` | Read after the saved cursor; `--follow`, `--all`, `--after`, `--thread`, `--ack` (server-side cursor), `--json` |
@@ -84,7 +84,7 @@ Channels are a research preview, so the plugin needs the development flag until 
 claude --dangerously-load-development-channels plugin:agents-connect@paldom   # after /plugin marketplace add Paldom/agents-connect
 ```
 
-Without channel mode, `aconn setup` installs hooks that give a similar result on any Claude Code version: unread messages are added as context on each prompt and after each turn, an `asyncRewake` hook wakes the session when something arrives, and a `PermissionRequest` hook asks you before `Bash`, `Write` and `Edit` calls.
+Without channel mode, `aconn setup` installs project-level hooks that give a similar result on any Claude Code version (they stay silent in projects without an `.agents-connect.json`): unread messages are added as context on each prompt and after each turn, an `asyncRewake` hook wakes the session when something arrives, and a `PermissionRequest` hook asks you before `Bash`, `Write` and `Edit` calls.
 
 ## Agent skill
 

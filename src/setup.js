@@ -46,10 +46,11 @@ export async function setup(o) {
   const done = []
   const say = (/** @type {string} */ what, /** @type {boolean} */ changed) => changed && done.push(`${o.dryRun ? 'would write' : 'wrote'} ${what}`)
 
-  // Claude Code: project .mcp.json + hooks in ~/.claude/settings.json
+  // Claude Code: project .mcp.json + hooks in the project's .claude/settings.local.json (per developer, not committed).
+  // Hooks are deliberately not global: a global hook would run in every project, configured or not.
   if (existsSync(join(home, '.claude'))) {
     say('.mcp.json (Claude Code project MCP server)', editJson(join(o.cwd, '.mcp.json'), (c) => ({ ...c, mcpServers: { ...(c.mcpServers ?? {}), 'agents-connect': MCP_ENTRY } }), o))
-    say('~/.claude/settings.json (hooks: inbox on prompt/stop, wake, permission relay)', editJson(join(home, '.claude', 'settings.json'), (c) => {
+    say('.claude/settings.local.json (project hooks: inbox on prompt/stop, wake, permission relay)', editJson(join(o.cwd, '.claude', 'settings.local.json'), (c) => {
       const hooks = { ...(c.hooks ?? {}) }
       const has = (/** @type {any[]} */ list, /** @type {string} */ cmd) => (list ?? []).some((/** @type {any} */ g) => (g.hooks ?? []).some((/** @type {any} */ h) => String(h.command ?? '').replace(/^ac /, 'agents-connect ').startsWith(cmd)))
       const add = (/** @type {string} */ ev, /** @type {any} */ group) => {
@@ -90,9 +91,16 @@ export async function setup(o) {
     if (!o.dryRun) appendFileSync(agentsMd, (cur && !cur.endsWith('\n') ? '\n' : '') + AGENTS_SNIPPET)
     say('AGENTS.md (usage snippet)', true)
   }
+  const globalSettings = join(home, '.claude', 'settings.json')
+  if (existsSync(globalSettings)) {
+    try {
+      const g = JSON.parse(readFileSync(globalSettings, 'utf8'))
+      const stale = Object.values(g.hooks ?? {}).flat().some((/** @type {any} */ grp) => (grp.hooks ?? []).some((/** @type {any} */ h) => /^(agents-connect|ac|aconn) /.test(h.command ?? '')))
+      if (stale) console.error('note: ~/.claude/settings.json still has agents-connect hooks from an earlier setup; remove them so unconfigured projects stay quiet (hooks now live per project).')
+    } catch {}
+  }
   if (!done.length) console.error('nothing to do: every detected harness is already configured')
   else console.error(done.join('\n'))
   console.error('\nnext: `aconn login --api-url <hub>/api` (once per machine) and `aconn init <scope> --subscribe build,deploy` (per repo).')
   console.error('Claude Code channel mode (push into idle sessions): `claude --dangerously-load-development-channels server:agents-connect` after setting the .mcp.json args to ["mcp","--channel"].')
-  console.error('If a plain `aconn` prints "total 0.00", your shell ran /usr/sbin/ac: run `rehash` (zsh) / `hash -r` (bash) or use the `agents-connect` command.')
 }

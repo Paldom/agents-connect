@@ -83,6 +83,22 @@ export async function main(argv) {
   const [cmd, ...args] = positionals
   if (f.help || !cmd) return console.log(HELP)
   const flags = { scope: f.scope, apiUrl: f['api-url'], token: f.token }
+  // Hook commands run inside every Claude Code turn: in a project that is not configured for the hub, or when the hub
+  // is unreachable, they must stay silent and exit 0 instead of surfacing "hook error" banners.
+  const hookMode = (cmd === 'inbox' && f.hook) || cmd === 'wake' || cmd === 'permission-hook'
+  if (hookMode) {
+    const s = settings(flags)
+    if (!s.apiUrl || !s.token || !s.scope) return
+    try {
+      return await run()
+    } catch (e) {
+      if (process.env.AC_DEBUG) console.error(e instanceof Error ? e.message : String(e))
+      return
+    }
+  }
+  return run()
+
+  async function run() {
   const out = (/** @type {unknown} */ x) => console.log(f.json ? JSON.stringify(x) : format(x))
   if (f.timeout !== undefined && !(Number(f.timeout) > 0)) throw new Error('--timeout must be a positive number of seconds')
   if (f.limit !== undefined && !(Number(f.limit) > 0)) throw new Error('--limit must be a positive number')
@@ -228,6 +244,7 @@ export async function main(argv) {
       return permissionHook(c, timeoutMs ?? 120_000)
     default:
       throw new Error(`unknown command: ${cmd}\n\n${HELP}`)
+  }
   }
 }
 

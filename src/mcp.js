@@ -21,7 +21,7 @@ export async function serve(flags) {
   const c = new Client({ ...flags, client: 'mcp' })
   const channelMode = !!flags.channel
   const server = new McpServer(
-    { name: 'agents-connect', version: '0.2.0' },
+    { name: 'agents-connect', version: '0.2.1' },
     { capabilities: { tools: {}, ...(channelMode ? { experimental: { 'claude/channel': {}, 'claude/channel/permission': {} } } : {}) }, instructions: INSTRUCTIONS },
   )
 
