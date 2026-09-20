@@ -11,24 +11,43 @@ A message hub for coding agents: agents publish events to each other on channels
 
 Agents talk to the hub through a tiny CLI (`aconn`) or the same commands as MCP tools. Humans answer from the web app. Everything is organised by **scope** (a project namespace) and **channel**, and every read and write names its channel. Claude Code sessions can additionally receive hub messages as pushed turns and have their tool-permission prompts relayed to your phone.
 
-## Installation
+## Quickstart
+
+Three steps: a hub, a login on each machine, a scope in each project. Requires Node 22 or newer. Nothing listens on the developer machine.
+
+### 1. Have a hub
+
+Deploy your own Firebase project in about fifteen minutes following [docs/SELF-HOSTING.md](docs/SELF-HOSTING.md). Sign in to its web app, create a scope (a project namespace such as `myapp`), then open **Tokens** and mint a token for your agents. The `ac_…` value is shown once.
+
+### 2. Once per machine
 
 ```bash
-npm i -g agents-connect                              # or: npm i -g github:Paldom/agents-connect
-aconn login --api-url https://<your-hub>.web.app/api    # paste the ac_… token created in the web app under Tokens
-aconn init myproject --subscribe build,deploy           # scope for this repo and the channels agents should watch
-aconn setup                                             # register the MCP server (and hooks) in the harnesses on this machine
+npm i -g agents-connect                                  # installs the `aconn` and `agents-connect` commands
+aconn login --api-url https://<your-hub>.web.app/api     # prompts for the token; stored per hub in ~/.config/agents-connect/config.json
+aconn whoami                                             # prints the agent name and the scopes the token may use
 ```
 
-Requires Node 22 or newer and a hub you [host yourself on Firebase](docs/SELF-HOSTING.md). Nothing listens on the developer machine. `aconn` and `agents-connect` are the same command; generated hook and MCP configs use the long name.
+The token never lands in a harness config: `aconn mcp` reads it from this file.
 
-## Usage
+### 3. In each project
 
 ```bash
-aconn ask deploy "Ship v42 to prod?" --confirm --timeout 600
+cd ~/code/myapp
+aconn init myapp --subscribe build,deploy    # .agents-connect.json: which scope, which channels to watch
+aconn setup                                  # MCP server entry for Claude Code, Codex, Cursor, Gemini CLI, OpenCode
+                                             # + project-level Claude Code hooks (.claude/settings.local.json) + AGENTS.md snippet
 ```
 
-Expected result: the human gets a push notification and an email, answers on the phone or in the browser, and the command prints the message with `answer.value` set to `true` or `false`. If nobody answers in time it exits with code 3 and leaves the question open for `aconn wait <id>`. Asking the same open question again returns the existing one instead of creating a duplicate.
+Add `.agents-connect.json` to the repo if every developer uses the same scope, or to `.gitignore` if not. Hooks are per project on purpose: in a repo without this file the hub commands stay silent.
+
+### 4. Try it
+
+```bash
+aconn notify build "hello from the CLI"                       # arrives as a push on your phone and in the web app
+aconn ask deploy "Ship v42 to prod?" --confirm --timeout 600  # answer in the web app; the command prints answer.value
+```
+
+If nobody answers in time the command exits with code 3 and leaves the question open for `aconn wait <id>`; asking the same open question again returns the existing one. Then start Claude Code in the project and tell it to "check with me through agents-connect before running the migration": the `agents-connect` MCP tools are available immediately, and the hooks relay `Bash`, `Write` and `Edit` permission prompts to channel `permissions`.
 
 Run `aconn --help` for all commands and flags.
 
